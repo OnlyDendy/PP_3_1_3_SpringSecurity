@@ -11,5 +11,5 @@ public interface UserService {
     boolean update(User user);
     boolean removeById(Long id);
     List<User> findAll();
-    Optional<User> findById(Long id);
+    User findById(Long id);
 }

@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
@@ -32,7 +34,6 @@ public class UserServiceImpl implements UserService {
                     entity.setUserName(user.getUserName());
                     entity.setFirstName(user.getFirstName());
                     entity.setLastName(user.getLastName());
-                    //entity.setBirthDate(user.getBirthDate());
                     entity.setPassword(user.getPassword());
                     entity.setRoles(user.getRoles());
                     return true;
@@ -43,12 +44,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean removeById(Long id) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    userRepository.delete(user);
-                    return true;
-                })
-                .orElse(false);
+        if (userRepository.findById(id).isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
     }
 }
