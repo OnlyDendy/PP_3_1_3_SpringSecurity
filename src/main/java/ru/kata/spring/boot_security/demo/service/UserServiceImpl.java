@@ -8,7 +8,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,8 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean update(User user) {
-        return userRepository.findById(user.getId())
+    public void update(User user) {
+        userRepository.findById(user.getId())
                 .map(entity -> {
                     entity.setUserName(user.getUserName());
                     entity.setFirstName(user.getFirstName());
@@ -37,16 +36,14 @@ public class UserServiceImpl implements UserService {
                     entity.setPassword(user.getPassword());
                     entity.setRoles(user.getRoles());
                     return true;
-                })
-                .orElse(false);
+                });
     }
 
     @Override
     @Transactional
-    public boolean removeById(Long id) {
+    public void removeById(Long id) {
         if (userRepository.findById(id).isPresent()) {
             userRepository.deleteById(id);
-            return true;
         } else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
