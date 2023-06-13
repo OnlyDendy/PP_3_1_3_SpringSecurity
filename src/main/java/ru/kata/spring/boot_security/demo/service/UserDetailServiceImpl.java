@@ -21,6 +21,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserAndFetchRoles(username)
                 .orElseThrow(()-> new UsernameNotFoundException("Username [" + username +
-                                                                "] не найден в БД"));
+                        "] не найден в БД"));
     }
 }
