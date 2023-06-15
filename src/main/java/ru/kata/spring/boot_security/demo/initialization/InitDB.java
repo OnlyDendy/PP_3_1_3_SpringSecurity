@@ -15,13 +15,10 @@ public class InitDB {
 
     private final RoleService roleService;
     private final UserService userService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public InitDB(RoleService roleService, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public InitDB(RoleService roleService, UserService userService) {
         this.roleService = roleService;
         this.userService = userService;
-
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
     @PostConstruct
     @Transactional
@@ -30,15 +27,15 @@ public class InitDB {
         Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleUser = new Role("ROLE_USER");
 
-        User admin = new User("admin", "Антон", "Шорин", bCryptPasswordEncoder.encode("1"));
+        User admin = new User("admin", "Антон", "Шорин", "1");
         admin.addRole(roleService.add(roleAdmin));
         userService.add(admin);
 
-        User user = new User("user", "Ольга", "Шорина", bCryptPasswordEncoder.encode("2"));
+        User user = new User("user", "Ольга", "Шорина", "2");
         user.addRole(roleService.add(roleUser));
         userService.add(user);
 
-        User userAdmin = new User("superadmin", "Кирилл", "Шорин", bCryptPasswordEncoder.encode("3"));
+        User userAdmin = new User("superadmin", "Кирилл", "Шорин", "3");
         userAdmin.addRole(roleService.add(roleUser));
         userAdmin.addRole(roleService.add(roleAdmin));
         userService.add(userAdmin);
