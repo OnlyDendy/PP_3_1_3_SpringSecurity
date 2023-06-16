@@ -48,9 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void removeById(Long id) {
-        if (userRepository.findById(id).isPresent()) {
-            userRepository.deleteById(id);
-        } else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        userRepository.deleteById(id);
     }
 
     @Override
